@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logo Display</title>
+    <style>
+        /* Basic CSS for styling the page */
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color:#cbdbf3; /* Black background */
+            color: white;
+        }
+        #logo {
+            display: block;
+            max-width: 500px;
+            max-height: 500px;
+        }
+    </style>
+</head>
+<body>
+    <!-- The logo image -->
+    <img id="logo" src="S.jfif" alt="Logo">
+
+    <script>
+        // Wait for the page to load
+        window.onload = function() {
+            setTimeout(function() {
+                // Redirect to shop.html after 0.5 seconds (500 milliseconds)
+                window.location.href = 'shop.html';
+            }, 2000); // 500ms = 2.5 seconds
+        };
+    </script>
+</body>
+</html>

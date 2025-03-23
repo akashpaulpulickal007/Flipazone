@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animal Medicine Store</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #444;
+        }
+        .container {
+            width: 90%;
+            margin: auto;
+color: black;
+            max-width: 1400px;
+
+        }
+        header {
+            background:#cbdbf3;
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .cart-icon {
+            position: fixed;
+            right: 20px;
+            top: 20px;
+            width: 50px;  /* Adjust the size of the icon */
+            height: 50px; /* Adjust the size of the icon */
+            background-color: transparent;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+        .cart-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;  /* Ensure the cart image fits inside the icon */
+        }
+        #cart-count {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: white;
+            background-color: #28a745;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            text-align: center;
+            line-height: 20px;
+        }
+   .search-bar {
+            margin: 1rem 0;
+            padding: 1rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .search-input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+       .product-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);  /* Set 3 columns per row */
+    gap: 1.5rem;
+    padding: 1rem 0;
+}
+
+@media (max-width: 1200px) {
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr);  /* 2 columns for medium screens */
+    }
+}
+
+@media (max-width: 768px) {
+    .product-grid {
+        grid-template-columns: 1fr;  /* 1 column for small screens */
+    }
+}
+
+        .product {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;  /* Make the items stack vertically */
+    justify-content: space-between;  /* Distribute space evenly */
+    height: 100%;  /* Ensure the product container takes up full height */
+}
+
+        .product:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .product-image img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.product-info {
+    padding: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;  /* Distribute elements inside the product */
+    height: 100%;  /* Make sure this takes up all the available height */
+}
+
+.product-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #2a5298;
+}
+
+.product-desc {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 1rem;
+    line-height: 1.4;
+}
+
+.product-price {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #28a745;
+    margin-bottom: 1rem;
+}
+
+.add-to-cart {
+    background: #64637d;  /* Change the background to black */
+    color: white;  /* Keep the text color white for contrast */
+    border: none;
+    padding: 0.8rem;
+    width: 100%;  /* Ensure the button takes the full width */
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-weight: 500;
+    margin-top: auto;  /* Push the button to the bottom of the container */
+}
+
+.add-to-cart:hover {
+    background: #333;  /* Darken the black color when hovering */
+}
+
+
+
+        /* Modal (Payment Form) */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            width: 300px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+        .modal-content h3 {
+            margin-bottom: 1rem;
+        }
+        .modal-content input {
+            width: 100%;
+            padding: 0.8rem;
+            margin: 0.5rem 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .modal-content button {
+            width: 100%;
+            padding: 0.8rem;
+            background-color: #2a5298;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .modal-content button:hover {
+            background-color: #1e3c72;
+        }
+        .close-modal {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 0.8rem;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 1rem;
+            width: 100%;
+        }
+
+        /* Error Message */
+        #error-message {
+            color: red;
+            display: none;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Flipazon Store</h1>
+            <p>Your Product Destiny here</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="search-bar">
+            <input type="text" class="search-input" placeholder="Search products..." id="search-input">
+        </div>
+        <div class="product-grid" id="product-list"></div>
+    </div>
+
+    <!-- Cart Icon -->
+    <div class="cart-icon" id="cart-icon">
+        <img src="f.webp" alt="Cart" id="cart-img" />
+        <span id="cart-count">0</span>
+    </div>
+
+    <!-- Modal for Payment -->
+    <div id="payment-modal" class="modal">
+        <div class="modal-content">
+            <h3>Payment Details</h3>
+            <p id="product-info">Amount: ₹0</p>
+            <input type="text" placeholder="Card Number" id="card-number">
+            <input type="text" placeholder="Expiry Date (MM/YY)" id="expiry-date">
+            <input type="text" placeholder="CVV" id="cvv">
+            <button id="pay-button">Proceed with Payment</button>
+            <button class="close-modal" onclick="closeModal()">Close</button>
+
+            <!-- Error message section -->
+            <p id="error-message">Server error, please contact your bank.</p>
+        </div>
+    </div>
+
+    <script>
+  const products = [
+    { name: "Puma Ignite Fast", price: "₹3480", desc: "Sporty running shoes for men", img: "medi1.jfif" },
+    { name: "Puma Future Rider", price: "₹4480", desc: "Stylish retro sneakers for women", img: "2.jfif" },
+    { name: "Puma RS-X", price: "₹5950", desc: "Bold and modern design for daily wear", img: "3.jfif" },
+    { name: "Puma Clydes", price: "₹3980", desc: "Classic low-top sneakers with a vintage feel", img: "4.jfif" },
+    { name: "Adidas Ultraboost", price: "₹8050", desc: "Running shoes with superior comfort", img: "5.jfif" },
+    { name: "Adidas NMD", price: "₹6980", desc: "Stylish and lightweight shoes for all-day wear", img: "6.jfif" },
+    { name: "Adidas Samba", price: "₹5450", desc: "Classic shoes with a timeless design", img: "7.jfif" },
+    { name: "Adidas Superstar", price: "₹4550", desc: "Iconic sneakers with a smooth leather finish", img: "8.jfif" },
+    { name: "Puma Essential T-shirt", price: "₹1480", desc: "Basic and comfortable cotton T-shirt", img: "9.jfif" },
+    { name: "Puma Training T-shirt", price: "₹1780", desc: "Moisture-wicking T-shirt for workouts", img: "10.jfif" },
+    { name: "Puma Graphic Tee", price: "₹2020", desc: "Stylish T-shirt with Puma graphic print", img: "11.jfif" },
+    { name: "Puma Sports T-shirt", price: "₹2180", desc: "Breathable and flexible for active wear", img: "12.jfif" },
+    { name: "Adidas Performance T-shirt", price: "₹1780", desc: "Sweat-absorbing workout T-shirt", img: "13.jfif" },
+    { name: "Adidas Originals Tee", price: "₹2480", desc: "Retro-inspired casual T-shirt", img: "14.jfif" },
+    { name: "Adidas Trefoil T-shirt", price: "₹2220", desc: "Classic logo T-shirt for everyday wear", img: "15.jfif" },
+    { name: "Adidas Graphic T-shirt", price: "₹2750", desc: "Graphic design for a unique look", img: "16.jfif" },
+    { name: "Levi's 501 Original", price: "₹3980", desc: "Classic straight-leg jeans with a timeless fit", img: "17.jfif" },
+    { name: "Levi's 511 Slim", price: "₹3480", desc: "Slim-fit jeans with a modern cut", img: "18.jfif" },
+    { name: "Levi's 505 Regular", price: "₹3750", desc: "Regular-fit jeans with a comfortable waistband", img: "19.jfif" },
+    { name: "Levi's 710 Super Skinny", price: "₹4180", desc: "Super skinny jeans with a flattering fit", img: "20.jfif" },
+    { name: "Apple iPhone 14", price: "₹79950", desc: "Latest iPhone with high-performance A15 Bionic chip", img: "21.jfif" },
+    { name: "Samsung Galaxy S23", price: "₹74950", desc: "Flagship phone with advanced camera system", img: "22.jfif" },
+    { name: "OnePlus 11", price: "₹59800", desc: "Fast charging and high-end performance", img: "23.jfif" },
+    { name: "Xiaomi Redmi Note 12", price: "₹17950", desc: "Budget-friendly phone with great features", img: "24.jfif" },
+    { name: "Casio G-Shock", price: "₹3470", desc: "Durable and rugged watch for outdoor activities", img: "25.jfif" },
+    { name: "Fossil Gen 6 Smartwatch", price: "₹17950", desc: "Modern smartwatch with fitness tracking", img: "26.jfif" },
+    { name: "Rolex Submariner", price: "₹94500", desc: "Iconic luxury dive watch", img: "27.jfif" },
+    { name: "Titan Smartwatch", price: "₹4950", desc: "Affordable smartwatch with health tracking", img: "28.jfif" },
+];
+        let cart = [];
+
+        function displayProducts(filteredProducts) {
+            const productList = document.getElementById("product-list");
+            productList.innerHTML = '';
+            
+            filteredProducts.forEach(product => {
+                const productBox = document.createElement("div");
+                productBox.classList.add("product");
+                productBox.innerHTML = `
+                    <div class="product-image">
+                        <img src="${product.img}" alt="${product.name}">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">${product.name}</h3>
+                        <p class="product-desc">${product.desc}</p>
+                        <div class="product-price">${product.price}</div>
+                        <button class="add-to-cart" data-product='${JSON.stringify(product)}'>Add to Cart</button>
+                    </div>
+                `;
+                productList.appendChild(productBox);
+            });
+
+            document.querySelectorAll('.add-to-cart').forEach(button => {
+                button.addEventListener('click', () => {
+                    const product = JSON.parse(button.getAttribute('data-product'));
+                    addToCart(product);
+                });
+            });
+        }
+
+        function addToCart(product) {
+            cart.push(product);
+            updateCartCount();
+        }
+
+        function updateCartCount() {
+            const cartCount = document.getElementById('cart-count');
+            cartCount.textContent = cart.length;
+        }
+
+        function showPaymentModal() {
+            const modal = document.getElementById('payment-modal');
+            const productInfo = document.getElementById('product-info');
+            const totalAmount = cart.reduce((total, product) => total + parseInt(product.price.replace('₹', '')), 0);
+            productInfo.textContent = `Total Amount: ₹${totalAmount}`;
+            modal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('payment-modal');
+            modal.style.display = 'none';
+        }
+
+        // Show error message when user clicks on "Proceed with Payment"
+        document.getElementById('pay-button').addEventListener('click', () => {
+            const errorMessage = document.getElementById('error-message');
+            errorMessage.style.display = 'block';
+        });
+
+        document.getElementById('cart-icon').addEventListener('click', showPaymentModal);
+
+        document.getElementById('search-input').addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const filteredProducts = products
+                .filter(product => 
+                    product.name.toLowerCase().includes(searchTerm) || 
+                    product.desc.toLowerCase().includes(searchTerm)
+                )
+                .sort((a, b) => a.name.localeCompare(b.name)); // Sort alphabetically
+
+            displayProducts(filteredProducts);
+        });
+
+        displayProducts(products); // Display all products on initial load
+    </script>
+</body>
+</html>
